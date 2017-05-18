@@ -1,29 +1,16 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.TextField;
 
-import javafx.scene.layout.FlowPane;
-import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 
-
-/**
- * Write a description of class Conversacion here.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
 public class Conversacion extends Application
 {
-    
-    public Conversacion()
-    {
-        
-    }
 
     public static void main(String[] args)
     {
@@ -33,37 +20,36 @@ public class Conversacion extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        Scene scene = new Scene(new Group());
+        
+        primaryStage.setWidth(400);
+        primaryStage.setHeight(400);
         primaryStage.setTitle("Conversacion");
-        BorderPane contenedor = new BorderPane();
         
-        
-        Button btn = new Button("Enviar");
-        btn.setOnAction((event) -> {
-            Label comentario = new Label("test");
-            comentario.setLayoutY(300);
-            comentario.setLayoutX(300);
-            contenedor.getChildren().add(comentario);
-            primaryStage.show();
-        });
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
         
         Label labelNombre = new Label("Nombre:");
         TextField campoNombre = new TextField();
-        HBox cajaNombre = new HBox();
-        cajaNombre.getChildren().addAll(labelNombre, campoNombre);
-        cajaNombre.setSpacing(10);
         
-        Label labelComentario = new Label("Comenrario:");
+        Label labelComentario = new Label("Comentario:");
         TextField campoComentario = new TextField();
         
-        FlowPane cajaComentario = new FlowPane(Orientation.VERTICAL);
-        cajaComentario.setVgap(10);
-        cajaComentario.getChildren().addAll(labelComentario, campoComentario, btn);
+        Button btn = new Button("Enviar");
+        btn.setOnAction((event) -> {
+            String usuarioActual = campoNombre.getText();
+            String comentarioActual = campoComentario.getText();
+            if(usuarioActual.length() > 0 && comentarioActual.length() > 0){
+                Label entrada = new Label (new Comentario(usuarioActual, comentarioActual).toString());
+                vbox.getChildren().add(entrada);
+            }
+            campoNombre.clear();
+            campoComentario.clear();
+        });
         
+        vbox.getChildren().addAll(labelNombre, campoNombre, labelComentario, campoComentario, btn);
         
-        
-        contenedor.setLeft(cajaComentario);
-        contenedor.setTop(cajaNombre);
-        Scene scene = new Scene(contenedor, 300, 250);
+        ((Group)scene.getRoot()).getChildren().add(vbox);
         
         primaryStage.setScene(scene);
         primaryStage.show();
